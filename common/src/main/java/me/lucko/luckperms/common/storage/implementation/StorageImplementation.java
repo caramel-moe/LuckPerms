@@ -68,6 +68,11 @@ public interface StorageImplementation {
     void applyBulkUpdate(BulkUpdate bulkUpdate) throws Exception;
 
     User loadUser(UUID uniqueId, String username) throws Exception;
+    // caramel start
+    default User loadUser(UUID uniqueId, String username, boolean join) throws Exception {
+        return loadUser(uniqueId, username);
+    }
+    // caramel start
 
     void saveUser(User user) throws Exception;
 
@@ -98,6 +103,11 @@ public interface StorageImplementation {
     void deleteTrack(Track track) throws Exception;
 
     PlayerSaveResult savePlayerData(UUID uniqueId, String username) throws Exception;
+    // caramel start
+    default PlayerSaveResult savePlayerData(UUID uniqueId, String username, boolean join) throws Exception {
+        return savePlayerData(uniqueId, username);
+    }
+    // caramel start
 
     void deletePlayerData(UUID uniqueId) throws Exception;
 

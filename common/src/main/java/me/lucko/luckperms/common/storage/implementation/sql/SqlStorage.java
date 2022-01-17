@@ -319,6 +319,13 @@ public class SqlStorage implements StorageImplementation {
 
     @Override
     public User loadUser(UUID uniqueId, String username) throws SQLException {
+        // caramel start
+        return this.loadUser(uniqueId, username, false);
+    }
+
+    @Override
+    public User loadUser(UUID uniqueId, String username, boolean join) throws SQLException {
+        // caramel end
         User user = this.plugin.getUserManager().getOrMake(uniqueId, username);
 
         List<Node> nodes;
@@ -328,6 +335,11 @@ public class SqlStorage implements StorageImplementation {
             nodes = selectUserPermissions(c, user.getUniqueId());
             playerData = selectPlayerData(c, user.getUniqueId());
         }
+        // caramel start
+        if (playerData == null && join) {
+            playerData = new SqlPlayerData(GroupManager.DEFAULT_GROUP_NAME, username);
+        }
+        // caramel end
 
         if (playerData != null) {
             if (playerData.primaryGroup != null) {
@@ -606,12 +618,20 @@ public class SqlStorage implements StorageImplementation {
 
     @Override
     public PlayerSaveResult savePlayerData(UUID uniqueId, String username) throws SQLException {
+        // caramel start
+        return this.savePlayerData(uniqueId, username, false);
+    }
+
+    @Override
+    public PlayerSaveResult savePlayerData(UUID uniqueId, String username, boolean join) throws SQLException {
+        // caramel end
         username = username.toLowerCase(Locale.ROOT);
         String oldUsername = null;
 
         try (Connection c = this.connectionFactory.getConnection()) {
             SqlPlayerData existingPlayerData = selectPlayerData(c, uniqueId);
             if (existingPlayerData == null) {
+                if (!join) // caramel
                 try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(PLAYER_INSERT))) {
                     ps.setString(1, uniqueId.toString());
                     ps.setString(2, username);

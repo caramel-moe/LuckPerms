@@ -439,4 +439,25 @@ public class LPBukkitPlugin extends AbstractLuckPermsPlugin {
         this.defaultPermissionMap = defaultPermissionMap;
     }
 
+    // caramel start
+    @Override
+    public Optional<java.util.UUID> lookupUniqueId(String username) {
+        java.util.UUID superMtd = super.lookupUniqueId(username).orElse(null);
+        if (superMtd == null) {
+            Player player = org.bukkit.Bukkit.getPlayer(username);
+            superMtd = player == null ? null : player.getUniqueId();
+        }
+        return Optional.ofNullable(superMtd);
+    }
+
+    @Override
+    public Optional<String> lookupUsername(java.util.UUID uuid) {
+        String superMtd = super.lookupUsername(uuid).orElse(null);
+        if (superMtd == null) {
+            Player player = org.bukkit.Bukkit.getPlayer(uuid);
+            superMtd = player == null ? null : player.getName();
+        }
+        return Optional.ofNullable(superMtd);
+    }
+    // caramel end
 }

@@ -212,4 +212,21 @@ public class LPVelocityPlugin extends AbstractLuckPermsPlugin {
         return this.contextManager;
     }
 
+    // caramel start
+    @Override
+    public Optional<java.util.UUID> lookupUniqueId(String username) {
+        java.util.UUID superMtd = super.lookupUniqueId(username).orElse(null);
+        if (superMtd == null) superMtd = this.bootstrap.getProxy().getPlayer(username)
+                .map(com.velocitypowered.api.proxy.Player::getUniqueId).orElse(null);
+        return Optional.ofNullable(superMtd);
+    }
+
+    @Override
+    public Optional<String> lookupUsername(java.util.UUID uuid) {
+        String superMtd = super.lookupUsername(uuid).orElse(null);
+        if (superMtd == null) superMtd = this.bootstrap.getProxy().getPlayer(uuid)
+                .map(com.velocitypowered.api.proxy.Player::getUsername).orElse(null);
+        return Optional.ofNullable(superMtd);
+    }
+    // caramel end
 }

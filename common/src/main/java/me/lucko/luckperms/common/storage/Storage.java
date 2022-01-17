@@ -145,8 +145,13 @@ public class Storage {
     }
 
     public CompletableFuture<User> loadUser(UUID uniqueId, String username) {
+        // caramel start
+        return this.loadUser(uniqueId, username, false);
+    }
+    public CompletableFuture<User> loadUser(UUID uniqueId, String username, boolean join) {
+        // caramel end
         return future(() -> {
-            User user = this.implementation.loadUser(uniqueId, username);
+            User user = this.implementation.loadUser(uniqueId, username, join); // caramel
             if (user != null) {
                 this.plugin.getEventDispatcher().dispatchUserLoad(user);
             }
@@ -255,8 +260,13 @@ public class Storage {
     }
 
     public CompletableFuture<PlayerSaveResult> savePlayerData(UUID uniqueId, String username) {
+        // caramel start
+        return this.savePlayerData(uniqueId, username, false);
+    }
+    public CompletableFuture<PlayerSaveResult> savePlayerData(UUID uniqueId, String username, boolean join) {
+        // caramel end
         return future(() -> {
-            PlayerSaveResult result = this.implementation.savePlayerData(uniqueId, username);
+            PlayerSaveResult result = this.implementation.savePlayerData(uniqueId, username, join); // caramel
             if (result != null) {
                 this.plugin.getEventDispatcher().dispatchPlayerDataSave(uniqueId, username, result);
             }

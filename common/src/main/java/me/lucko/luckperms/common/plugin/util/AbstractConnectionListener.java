@@ -67,7 +67,7 @@ public abstract class AbstractConnectionListener {
         this.plugin.getUserManager().getHouseKeeper().registerUsage(uniqueId);
 
         // save uuid data.
-        PlayerSaveResult saveResult = this.plugin.getStorage().savePlayerData(uniqueId, username).join();
+        PlayerSaveResult saveResult = this.plugin.getStorage().savePlayerData(uniqueId, username, true).join(); // caramel
 
         // fire UserFirstLogin event
         if (saveResult.includes(PlayerSaveResult.Outcome.CLEAN_INSERT)) {
@@ -99,7 +99,7 @@ public abstract class AbstractConnectionListener {
             this.plugin.getLogger().warn("See here for more info: https://luckperms.net/wiki/Network-Installation#pre-setup");
         }
 
-        User user = this.plugin.getStorage().loadUser(uniqueId, username).join();
+        User user = this.plugin.getStorage().loadUser(uniqueId, username, true).join(); // caramel
         if (user == null) {
             throw new NullPointerException("User is null");
         }
